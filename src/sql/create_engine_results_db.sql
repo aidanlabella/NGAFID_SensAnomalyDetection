@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS flights;
+DROP TABLE IF EXISTS oilt_predictions; 
+DROP TABLE IF EXISTS oilp_predictions; 
 -- This is the "base" info for the flights
 
 CREATE TABLE flights (
@@ -16,7 +19,7 @@ CREATE TABLE flights (
     E1_OilT REAL,
     E1_RPM REAL,
     PRIMARY KEY(flight_id, timestep)
-)
+);
 
 -- We will create a new table for all of our new parameter predictions
 
@@ -28,7 +31,8 @@ CREATE TABLE oilp_predictions (
     expected_E1_OilP REAL,
     predicted_E1_OilP REAL,
 
-    PRIMARY KEY(flight_id, genome_id, timestep)
+    PRIMARY KEY(flight_id, genome_id, timestep),
+    FOREIGN KEY (flight_id, timestep) REFERENCES flights (flight_id, timestep)
 );
 
 -- Oil Temp Predictions
@@ -39,5 +43,6 @@ CREATE TABLE oilt_predictions (
     expected_E1_OilT REAL,
     predicted_E1_OilT REAL,
 
-    PRIMARY KEY(flight_id, genome_id, timestep)
+    PRIMARY KEY(flight_id, genome_id, timestep),
+    FOREIGN KEY (flight_id, timestep) REFERENCES flights (flight_id, timestep)
 );

@@ -2,15 +2,13 @@ import sys
 import os
 import pandas as pd
 import db
+import insert_data as main
 
-flight_columns = ["flight_id", "timestep"]
+base_columns = main.flight_columns + ['genome_id']
 
 
-# Will insert the columns specified in the columns parameter
-# plus the base flight columns
-# Insert the csv files using a SQL INSERT, hence the name insert
-def insert_csvs(directory, table_name, columns):
-    columns = flight_columns + columns
+def insert_predictions(directory, table_name, genome_id, columns):
+    columns = base_columns + columns
 
     col_names = ",".join(columns)
     col_name_placeholders = ','.join(['?'] * len(columns))
@@ -36,8 +34,8 @@ def insert_csvs(directory, table_name, columns):
         values = []
 
         for i, j in dat.iterrows():
-            rvals = [flight_id, i]
-            for ii in range(2, len(columns)):
+            rvals = [flight_id, i, genome_id]
+            for ii in range(3, len(columns)):
                 key = columns[ii]
 
                 if key not in j:
@@ -49,25 +47,25 @@ def insert_csvs(directory, table_name, columns):
 
         db.preset_insert_many(values)
 
-        print(f"Inserted {len(dat)} rows for flight {flight_id}")
+        print(f"Inserted {len(dat)} PREDICTION rows for flight {flight_id}")
 
 
 if __name__ == "__main__":
     database = sys.argv[1]
     directory = sys.argv[2]
     table_name = sys.argv[3]
-    add_params = []
+    genome_id = int(sys.argv[4])
 
     # The rest of the arguments are the predicted columns for the CSV files
     # We generate the predicted/expected versions of these so they get into the database
-    for i in range(4, len(sys.argv)):
+    add_params = []
+    for i in range(5, len(sys.argv)):
         param = sys.argv[i]
         add_params.append("expected_" + param)
         add_params.append("predicted_" + param)
 
-    print(f"Importing CSVs from files in directory: {directory} to database file {database}")
 
     db.init(database)
 
-    expected_columns = os.getenv("EXAMM_INPUT_PARAMETERS").split(" ")
-    insert_csvs(directory, table_name, expected_columns)
+    print(f"Inseting predicted params from genome {genome_id} with CSV files in directory: {directory} to database file {database}")
+    insert_predictions(directory, table_name, genome_id, add_params)
