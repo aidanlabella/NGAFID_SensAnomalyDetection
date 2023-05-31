@@ -3,15 +3,15 @@ import os
 import pandas as pd
 import db
 
-flight_columns = ["flight_id", "timestep"]
+columns = ["flight_id", "timestep", "E1_CHT1", "E1_CHT2", "E1_CHT3", "E1_CHT4",
+           "E1_EGT1", "E1_EGT2", "E1_EGT3", "E1_EGT4", "E1_FFlow", "E1_OilP",
+           "E1_OilT", "E1_RPM", "volt1", "volt2", "amp1"]
 
 
 # Will insert the columns specified in the columns parameter
 # plus the base flight columns
 # Insert the csv files using a SQL INSERT, hence the name insert
-def insert_csvs(directory, table_name, columns):
-    columns = flight_columns + columns
-
+def insert_csvs(directory, table_name):
     col_names = ",".join(columns)
     col_name_placeholders = ','.join(['?'] * len(columns))
 
@@ -41,6 +41,7 @@ def insert_csvs(directory, table_name, columns):
                 key = columns[ii]
 
                 if key not in j:
+                    print("not found!")
                     rvals.append(j["#" + columns[ii]])
                 else:
                     rvals.append(j[columns[ii]])
@@ -56,18 +57,15 @@ if __name__ == "__main__":
     database = sys.argv[1]
     directory = sys.argv[2]
     table_name = sys.argv[3]
-    add_params = []
 
     # The rest of the arguments are the predicted columns for the CSV files
     # We generate the predicted/expected versions of these so they get into the database
     for i in range(4, len(sys.argv)):
         param = sys.argv[i]
-        add_params.append("expected_" + param)
-        add_params.append("predicted_" + param)
 
     print(f"Importing CSVs from files in directory: {directory} to database file {database}")
 
     db.init(database)
 
-    expected_columns = os.getenv("EXAMM_INPUT_PARAMETERS").split(" ")
-    insert_csvs(directory, table_name, expected_columns)
+    # expected_columns = os.getenv("EXAMM_INPUT_PARAMETERS").split(" ")
+    insert_csvs(directory, table_name)

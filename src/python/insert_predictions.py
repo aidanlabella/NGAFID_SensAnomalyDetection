@@ -4,8 +4,7 @@ import pandas as pd
 import db
 import insert_data as main
 
-base_columns = main.flight_columns + ['genome_id']
-
+base_columns = ['flight_id', 'timestep', 'genome_id']
 
 def insert_predictions(directory, table_name, genome_id, columns):
     columns = base_columns + columns
