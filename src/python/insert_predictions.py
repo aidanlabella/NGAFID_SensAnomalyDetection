@@ -6,6 +6,7 @@ import insert_data as main
 
 base_columns = ['flight_id', 'timestep', 'genome_id']
 
+
 def insert_predictions(directory, table_name, genome_id, columns):
     columns = base_columns + columns
 
@@ -66,5 +67,5 @@ if __name__ == "__main__":
 
     db.init(database)
 
-    print(f"Inseting predicted params from genome {genome_id} with CSV files in directory: {directory} to database file {database}")
+    print(f"Inserting predicted params from genome {genome_id} with CSV files in directory: {directory} to database file {database}")
     insert_predictions(directory, table_name, genome_id, add_params)

@@ -5,7 +5,8 @@ import db
 
 columns = ["flight_id", "timestep", "E1_CHT1", "E1_CHT2", "E1_CHT3", "E1_CHT4",
            "E1_EGT1", "E1_EGT2", "E1_EGT3", "E1_EGT4", "E1_FFlow", "E1_OilP",
-           "E1_OilT", "E1_RPM", "volt1", "volt2", "amp1"]
+           "E1_OilT", "E1_RPM", "volt1", "volt2", "amp1", "AltMSL", "AltB",
+           "AltGPS", "Pitch", "VSpd"]
 
 
 # Will insert the columns specified in the columns parameter

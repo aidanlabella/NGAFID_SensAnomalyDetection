@@ -21,3 +21,13 @@ def set_insert_statement(statement):
 def preset_insert_many(values):
     cursor.executemany(sql, values)
     connection.commit()
+
+def query(sql, *params):
+    cursor.execute(sql, params)
+    return cursor.fetchall()
+
+def get_timeseries_arr(table, column, flight_id):
+    sql = f"SELECT {column} FROM {table} WHERE flight_id = ?"
+    result = query(sql, flight_id)
+
+    return [row[0] for row in result]
