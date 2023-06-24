@@ -6,3 +6,7 @@
     1. `E1_OilP`
     2. `E1_OilT`
     3. `...`
+
+* We can use `N` evolved RNNs to predice the following **FLIGHT** parameters:
+    1. `AltMSL`
+        * Inputs: `AltB, AltGPS, Pitch, VSpd`
