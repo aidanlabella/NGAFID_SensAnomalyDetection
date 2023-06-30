@@ -3,9 +3,12 @@ import random
 import sys
 import os
 
+
 def create_noise(file, column, l, n):
     df = pd.read_csv(file)
     indicies = []
+
+    index = 0
 
     for i in range(0, n):
         l_df = len(df)
@@ -19,9 +22,13 @@ def create_noise(file, column, l, n):
 
         for j in range(start_index, start_index + l):
             # We can change this to whatever we want the "noise" to be
-            df.set_value(j, column, 0)
+            # print(f"idx: {j}: {df.at[j, column]}")
+            df.loc[j, column] = 0.0
+            # print(f"updated idx: {j}: {df.at[j, column]}")
+            index = j
 
-    return df
+    # df.update(df)
+    return df, index
 
 input_dir = sys.argv[1]
 output_dir = sys.argv[2]
@@ -30,5 +37,9 @@ rand_l = int(sys.argv[4])
 rand_n = int(sys.argv[5])
 
 for file in os.listdir(input_dir):
-    df = create_noise(file, column, rand_l, rand_n)
-    print(df)
+    if file.lower().endswith(".csv"):
+        df, index = create_noise(file, column, rand_l, rand_n)
+        df.to_csv(f"{output_dir}/{file}")
+
+        sz_df = len(df)
+        print(f"Wrote {sz_df} lines of noise-ified infile {file}. At idx[{index}]:{df.at[index, column]}")

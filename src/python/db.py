@@ -26,8 +26,8 @@ def query(sql, *params):
     cursor.execute(sql, params)
     return cursor.fetchall()
 
-def get_timeseries_arr(table, column, flight_id):
-    sql = f"SELECT {column} FROM {table} WHERE flight_id = ?"
-    result = query(sql, flight_id)
+def get_timeseries_arr(table, column, flight_id, genome_id):
+    sql = f"SELECT {column} FROM {table} WHERE flight_id = ? AND genome_id = ?"
+    result = query(sql, flight_id, genome_id)
 
     return [row[0] for row in result]

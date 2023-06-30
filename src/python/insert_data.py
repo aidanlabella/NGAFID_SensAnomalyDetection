@@ -42,7 +42,7 @@ def insert_csvs(directory, table_name):
                 key = columns[ii]
 
                 if key not in j:
-                    print("not found!")
+                    print(f"{key} not found in {j}!")
                     rvals.append(j["#" + columns[ii]])
                 else:
                     rvals.append(j[columns[ii]])
